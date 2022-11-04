@@ -1,14 +1,41 @@
-import create from 'zustand/react';
+import create, { SetState, StoreApi } from 'zustand';
+import { devtools } from 'zustand/middleware';
+interface User {
+  username: string;
+}
 
 export interface UserState {
-  user: {
-    username: string;
-  };
+  user: User;
   updateUser: (username: string) => void;
 }
 
-export const useStoreUser = create<UserState>(set => ({
-  user: { username: 'no-name' },
+export const initialUserState: User = {
+  username: 'no-name',
+};
+
+// const store = (
+//   set: (
+//     partial:
+//       | UserState
+//       | Partial<UserState>
+//       | ((state: UserState) => UserState | Partial<UserState>),
+//     replace?: boolean | undefined
+//   ) => void
+// ): UserState => ({
+//   user: initialState,
+//   updateUser: username =>
+//     set(state => ({ user: { ...state.user, username: 'ㅋㅋ' + username } })),
+// });
+
+// export const useStoreUser = create(
+//   process.env.NODE_ENV !== 'production' ? devtools(store) : store
+// );
+
+export const createUserSlice = (
+  set: StoreApi<UserState>['setState'],
+  get: StoreApi<UserState>['getState']
+): UserState => ({
+  user: initialUserState,
   updateUser: username =>
     set(state => ({ user: { ...state.user, username: 'ㅋㅋ' + username } })),
-}));
+});
