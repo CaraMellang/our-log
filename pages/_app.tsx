@@ -11,6 +11,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 }
 
+// export function getIni
+
 export const getServerSideProps = () => {
   const zustandStore = useStore();
   return {
