@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,17 +21,47 @@
     "baseUrl": "./",
     "paths": {
       // 절대경로 설정
-      "@/*": ["/*"],
-      "@components/*": ["src/components/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@common/*": ["src/common/*"],
-      "@pages/*": ["src/pages/*"],
-      "@utils/*": ["src/utils/*"],
-      "types/*": ["src/types/*"],
-      "@styles/*": ["styles/*"]
-    }
+      "@/*": [
+        "/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "types/*": [
+        "src/types/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
