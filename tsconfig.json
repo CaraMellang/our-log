@@ -22,28 +22,28 @@
     "paths": {
       // 절대경로 설정
       "@/*": [
-        "/*"
+        "*"
       ],
       "@components/*": [
-        "src/components/*"
+        "components/*"
       ],
       "@hooks/*": [
-        "src/hooks/*"
+        "hooks/*"
       ],
       "@layouts/*": [
-        "src/layouts/*"
+        "layouts/*"
       ],
       "@common/*": [
-        "src/common/*"
+        "common/*"
       ],
       "@pages/*": [
-        "src/pages/*"
+        "pages/*"
       ],
       "@utils/*": [
         "src/utils/*"
       ],
       "types/*": [
-        "src/types/*"
+        "types/*"
       ],
       "@styles/*": [
         "styles/*"

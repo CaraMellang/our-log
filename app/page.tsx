@@ -1,20 +1,26 @@
-import { use } from 'react';
+// import { use } from 'react';
+
+import { MainPage } from '@layouts/MainPage';
 
 export default async function Page() {
-  const res = await use(getUserData());
-  console.log('나가가가가', res);
+  // const res = await use(getUserData());
+  // console.log('나가가가가', res);
 
-  return <main>메인페이지컴포넌트입니다람쥐</main>;
+  return (
+    <main>
+      <MainPage />
+    </main>
+  );
 }
 // const Page = () => {
 //   return <div>메인2 페이지</div>;
 // };
 // export default Page;
 
-async function getUserData() {
-  //   const { data }: any = await fetch(`http://localhost:5000/user`, { cache: 'no-store' });
-  return 'ㅎㅎㅇㅎㅎㅇ';
-}
+// async function getUserData() {
+//   const { data }: any = await fetch(`http://localhost:5000/user`, { cache: 'no-store' });
+//   return 'ㅎㅎㅇㅎㅎㅇ';
+// }
 
 /**
  * 복잡하게 생각할거 없어. 서버랑 클라랑 스토어를 각기 생산하지만. 서버에서 fetch로 내 백앤드에 접근해서 데이터를 가져와서 적용해

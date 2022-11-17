@@ -1,4 +1,6 @@
 import { Children } from 'react';
+import { ManageUI } from '@components/ui/ManageUI';
+import { GlobalHeader } from '@components/common/GlobalHeader';
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -8,7 +10,10 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <html>
       <head></head>
-      <body>{children}</body>
+      <body>
+        <GlobalHeader />
+        <ManageUI>{children}</ManageUI>
+      </body>
     </html>
   );
 };
