@@ -1,5 +1,6 @@
 'use client';
-import hi, { notFound, useRouter, usePathname, useSearchParams, redirect } from 'next/navigation';
+import { notFound, useRouter, usePathname, useSearchParams, redirect } from 'next/navigation';
+//임포트를 비구조화로 안받고 그냥 변수로 받으면 터져버림 왜?????
 
 export default function PostDetailPage() {
   console.log(useSearchParams().toString(), usePathname().toString(), useSearchParams());
