@@ -4,7 +4,6 @@ import { MainPage } from '@layouts/MainPage';
 
 export default async function Page() {
   // const res = await use(getUserData());
-  // console.log('나가가가가', res);
 
   return (
     <main>
