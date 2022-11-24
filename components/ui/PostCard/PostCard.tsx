@@ -22,7 +22,7 @@ export function PostCard({
   imagePath = '',
 }: Props) {
   return (
-    <PostCardWrap href={'/post/21312'}>
+    <PostCardWrap href={'/post/@132123'}>
       <Image src={'https://picsum.photos/236'} width={320} height={160} alt={'LGTM'} />
       <PostMainWrap>
         <PostMainWrapTop>
