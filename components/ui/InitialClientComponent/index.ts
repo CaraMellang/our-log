@@ -1,0 +1,1 @@
+export { InitialClientComponent } from './InitialClientComponent';

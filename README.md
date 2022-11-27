@@ -15,7 +15,7 @@ Typescript 4.8.4
 Nextjs 13.0.1 , React 18.2.0
 dayjs 1.11.6
 axios 1.1.3
-react-quill 2.0.0 (마크다운)
+Toast Ui 3.2.2 (마크다운)
 react-query 3.39.2 (http)
 zustand 4.1.4 (전역 상태관리)
 
