@@ -1,34 +1,65 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import styled from '@emotion/styled';
-import { CustomTuiViewer, TuiEditor, TuiViewer } from '@components/ui/Markdown';
+import { CustomTuiViewer, TuiEditor } from '@components/ui/Markdown';
 
 export function PostWrite() {
+  const [theme, setTheme] = useState('light');
   const [el, setEl] = useState<string>();
   const editorRef = React.useRef<Editor>(null);
   const viewerRef = React.useRef<Viewer>(null);
 
-  const handleChange = (e: any) => {
-    console.log('에디터', editorRef.current);
-    console.dir(viewerRef.current);
-    const previewEl = editorRef.current?.getRootElement()?.querySelector('.toastui-editor-contents')?.outerHTML;
-    // const previewEl = editorRef.current?.getInstance().getHTML();
+  const handleChange = (e: 'markdown' | 'wysiwyg') => {
+    // const previewEl = editorRef.current?.getRootElement()?.querySelector('.toastui-editor-contents')?.outerHTML;
+    // const previewEl = editorRef.current?.getInstance().getHTML() as string;
+    const previewEl = editorRef.current?.getInstance().getEditorElements().mdPreview.outerHTML;
     setEl(previewEl);
   };
 
+  useLayoutEffect(() => {
+    const htmlTag = document.querySelector('html') as HTMLHtmlElement;
+    const bodyTag = document.querySelector('body') as HTMLBodyElement;
+
+    htmlTag.style.height = '100%';
+    bodyTag.style.height = '100%';
+
+    setTheme(localStorage.getItem('theme') || 'light');
+  }, []);
+
   return (
     <PostWriteWrap>
-      <div>나랑 글써볼래</div>
-      {typeof window !== 'undefined' ? (
-        <TuiEditor ref={editorRef} previewStyle="vertical" onChange={handleChange} initialValue=" " />
-      ) : (
-        ''
-      )}
-      {<CustomTuiViewer el={el} />}
+      <EditorWrap>
+        {typeof window !== 'undefined' ? (
+          <TuiEditor
+            ref={editorRef}
+            onChange={handleChange}
+            initialValue=" "
+            previewStyle={'vertical'}
+            theme={theme}
+            height="100%"
+            hideModeSwitch={true}
+          />
+        ) : (
+          ''
+        )}
+      </EditorWrap>
+      <ViewerWrap>{<CustomTuiViewer el={el} />}</ViewerWrap>
     </PostWriteWrap>
   );
 }
 
-const PostWriteWrap = styled.div``;
+const PostWriteWrap = styled.div`
+  display: flex;
+  height: 80%;
+  overflow: hidden;
+`;
+const EditorWrap = styled.div`
+  width: 50%;
+`;
+const ViewerWrap = styled.div`
+  width: 50%;
+  padding: 3rem;
+  overflow: scroll;
+`;

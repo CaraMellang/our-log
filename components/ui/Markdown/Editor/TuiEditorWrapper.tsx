@@ -1,6 +1,7 @@
 import { Editor, EditorProps } from '@toast-ui/react-editor';
 import React from 'react';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 //컬러플러그인
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';

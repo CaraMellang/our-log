@@ -3,6 +3,7 @@ import { ManageUI } from '@components/ui/ManageUI';
 import { GlobalHeader } from '@components/common/GlobalHeader';
 import '@styles/reset.scss';
 import { InitialClientComponent } from '@components/ui/InitialClientComponent';
+import '@styles/globals.css';
 
 export interface LayoutProps {
   children: React.ReactNode;
