@@ -14,7 +14,7 @@ interface CustomTuiViewerProps {
  * 상태변화될때마다 마크다운에 변화가 반영되는 커스텀 컴포넌트입니다.
  * element값을 넘겨주세요
  */
-const CustomTuiViewer = ({ el }: CustomTuiViewerProps) => {
+const TuiPreviewer = ({ el }: CustomTuiViewerProps) => {
   if (!el) return <div></div>;
   if (el instanceof Element)
     return (
@@ -52,7 +52,7 @@ const CustomTuiViewerWrap = styled.div`
   }
 `;
 
-export { CustomTuiViewer };
+export { TuiPreviewer };
 
 // const CustomTuiViewer = React.forwardRef<Editor, CustomTuiViewerProps>((props, ref) => {
 //   const editorRef = ref as MutableRefObject<Editor>;

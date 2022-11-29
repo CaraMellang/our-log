@@ -3,19 +3,57 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import styled from '@emotion/styled';
-import { CustomTuiViewer, TuiEditor } from '@components/ui/Markdown';
+import { TuiPreviewer, TuiEditor } from '@components/ui/Markdown';
+import { HookCallback } from '@toast-ui/editor/types/editor';
 
-export function PostWrite() {
+export default function PostWrite() {
   const [theme, setTheme] = useState('light');
-  const [el, setEl] = useState<string>();
+  const [el, setEl] = useState<Element | string>();
   const editorRef = React.useRef<Editor>(null);
   const viewerRef = React.useRef<Viewer>(null);
+  const [imgPaths, setImgPaths] = useState<{ seq: number; path: string }[]>();
 
   const handleChange = (e: 'markdown' | 'wysiwyg') => {
     // const previewEl = editorRef.current?.getRootElement()?.querySelector('.toastui-editor-contents')?.outerHTML;
     // const previewEl = editorRef.current?.getInstance().getHTML() as string;
     const previewEl = editorRef.current?.getInstance().getEditorElements().mdPreview.outerHTML;
     setEl(previewEl);
+  };
+
+  const HandleAddImageBlobHook = async (blob: Blob | File, cb: HookCallback) => {
+    const blobFile: any = blob;
+    const localImageUrl = URL.createObjectURL(blobFile);
+
+    cb(localImageUrl, blobFile.name);
+    const imgArr = editorRef.current?.getRootElement().querySelectorAll('img') as NodeListOf<HTMLImageElement>;
+    console.log('이미지들', imgArr, localImageUrl);
+    const imgArrLength = imgArr.length;
+    console.log(imgArrLength);
+
+    const imgSeq = Math.round(Math.random() * 100000);
+
+    imgArr[imgArrLength - 1].setAttribute('src', localImageUrl);
+    imgArr[imgArrLength - 1].setAttribute('id', String(imgSeq));
+
+    if (!imgPaths) return setImgPaths([{ seq: imgSeq, path: localImageUrl }]);
+    //typescript 이것도 못거르누
+    setImgPaths((prev) => {
+      if (!prev) return [{ seq: imgSeq, path: localImageUrl }];
+      return [...prev, { seq: imgSeq, path: localImageUrl }];
+    });
+    //목표 - 사진을 올리면 viewer이미지태그를 직접 조작해서 넣어줄거임. 동시에 얘는 멍청해서 바뀌면 src 어트리뷰트가 증발하니까 이곳에서 상태로 관리해서 하나하나 검증해서 넣어줄 것.
+    // TUI 제발 일해라.
+
+    (editorRef.current?.getRootElement().querySelectorAll('img') as NodeListOf<HTMLImageElement>)[
+      imgArrLength - 1
+    ].setAttribute('src', localImageUrl);
+
+    const convertArr = Array.from(
+      editorRef.current?.getRootElement().querySelectorAll('img') as NodeListOf<HTMLImageElement>,
+    );
+    convertArr.map((r) => console.log(r));
+
+    setEl(editorRef.current?.getInstance().getEditorElements().mdPreview);
   };
 
   useLayoutEffect(() => {
@@ -40,12 +78,15 @@ export function PostWrite() {
             theme={theme}
             height="100%"
             hideModeSwitch={true}
+            hooks={{
+              addImageBlobHook: HandleAddImageBlobHook,
+            }}
           />
         ) : (
           ''
         )}
       </EditorWrap>
-      <ViewerWrap>{<CustomTuiViewer el={el} />}</ViewerWrap>
+      <ViewerWrap>{<TuiPreviewer el={el} />}</ViewerWrap>
     </PostWriteWrap>
   );
 }

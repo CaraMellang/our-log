@@ -1,1 +1,4 @@
-export { PostWrite } from './PostWrite';
+import dynamic from 'next/dynamic';
+
+const PostWrite = dynamic(() => import('./PostWrite'), { ssr: false });
+export { PostWrite };
