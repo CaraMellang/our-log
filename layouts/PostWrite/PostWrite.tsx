@@ -5,7 +5,7 @@ import { Editor, Viewer } from '@toast-ui/react-editor';
 import styled from '@emotion/styled';
 import { TuiPreviewer, TuiEditor } from '@components/ui/Markdown';
 import { HookCallback } from '@toast-ui/editor/types/editor';
-import { useTuiEditor } from '@hooks/useTuiEditor';
+import { PromiseCbProps, useTuiEditor } from '@hooks/useTuiEditor';
 
 export default function PostWrite() {
   const [theme, setTheme] = useState('light');
@@ -13,8 +13,19 @@ export default function PostWrite() {
   const editorRef = React.useRef<Editor>(null);
   const viewerRef = React.useRef<Viewer>(null);
   const [imgPaths, setImgPaths] = useState<{ seq: number; path: string }[]>();
-  const [previewEl, handleAddImageBlobHook, onChangeEditorElement] = useTuiEditor({ ref: editorRef });
-  console.log('날싱행postWitertaew');
+
+  const callbackReplaceSrc = async ({ localImageUrl, imgAltName, cb }: PromiseCbProps) => {
+    try {
+      setTimeout(() => {
+        cb('localImageUrl', '헐 ㅋㅋㅋ');
+      }, 5555);
+    } catch (e: any) {}
+  };
+
+  const [previewEl, handleAddImageBlobHook, onChangeEditorElement] = useTuiEditor({
+    ref: editorRef,
+    callbackReplaceSrc,
+  });
 
   // const handleChange = (e: 'markdown' | 'wysiwyg') => {
   //   // const previewEl = editorRef.current?.getRootElement()?.querySelector('.toastui-editor-contents')?.outerHTML;

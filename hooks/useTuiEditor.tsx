@@ -8,9 +8,15 @@ interface ImgPathType {
   alt?: string;
 }
 
+export interface PromiseCbProps {
+  localImageUrl: string;
+  imgAltName: string;
+  cb: HookCallback;
+}
+
 interface Props {
   ref: React.RefObject<Editor>;
-  callbackReplaceSrc?: () => void;
+  callbackReplaceSrc?: ({ localImageUrl, imgAltName, cb }: PromiseCbProps) => Promise<void>;
 }
 
 /**
@@ -18,16 +24,15 @@ interface Props {
  * 변수명 개대충짯습니다. 리팩이 필요합니다.
  * Tui가 거지같이 만들어서 제어가 불가능합니다
  * 불가피하게 비제어로 만듭니다.
- *  @Param { ref } - TuiEditor useRef
- * @returns {ref , callbackReplaceSrc}
+ *  @Param { ref , callbackReplaceSrc} - TuiEditor useRef
+ * @returns {previewEl}
  * */
-export function useTuiEditor({ ref }: Props) {
+export function useTuiEditor({ ref, callbackReplaceSrc }: Props) {
   const [previewEl, setPreviewEl] = useState<Element | string>();
   const [imgPath, setImgPath] = useState<ImgPathType[]>();
   const imgPathRef = useRef<ImgPathType[]>();
   const [forceRerender, setForceRerender] = useState(false);
   const previweElRef = useRef<Element | string>();
-  const currentKey = useRef<string>();
 
   //입력하다가 이미지 태그 삭제하면 돌아가는 놈
   const onChangeImgDelete = () => {
@@ -37,15 +42,6 @@ export function useTuiEditor({ ref }: Props) {
     const ArrFilter = convertArr.filter((r) => !imgPathRef.current?.includes({ alt: r.alt }));
 
     console.log('자 내가 지워볼게 ', convertArr, ArrFilter, imgPathRef.current);
-    console.log('currentKey', currentKey.current);
-    //키입력을 사용한경우 리턴 ,키입력이 아닌경우 통과합니다.
-    // if (currentKey.current) return;
-
-    // if (!imgPathRef.current) {
-    //   imgPathRef.current = [...ArrSrcFilter.map((r) => ({ src: r.src, alt: r.alt }))];
-    //   return;
-    // }
-    // imgPathRef.current = [...imgPathRef.current, ...ArrSrcFilter.map((r) => ({ src: r.src, alt: r.alt }))];
 
     if (imgPathRef.current) {
       //없어진 img 태그 확인.(Element 리턴)
@@ -66,20 +62,14 @@ export function useTuiEditor({ ref }: Props) {
       });
       console.log('ㅋㅋ...', imgPathRefFilter);
 
+      //벨로그에서는 모든 이미지를 로컬로 저장하는듯 합니다. 남겨두자
+      // imgPathRef.current = imgPathRefFilter;
+      console.log(imgPathRef, '마참내!!!');
+
       ArrSrcFilter.forEach((r, idx) => r.setAttribute('src', imgPathRefFilter[idx].path as string));
 
       console.log('ㅎㅇ ㅎㅇ', ArrFilter, ArrSrcFilter, convertArr);
     }
-
-    // convertArr.forEach((r) => {
-    //   console.log('지울건데');
-    //   imgPath?.forEach((imgPath, idx) => {
-    //     console.log('제발 지워줘', imgPath, previewEl?.querySelectorAll('img'));
-    //     if (imgPath.alt === previewEl?.querySelectorAll('img')[idx]?.alt) {
-    //       previewEl?.querySelectorAll('img')[idx].setAttribute('src', String(imgPath.path));
-    //     }
-    //   });
-    // });
   };
 
   //글입력 할 경우 호출되는 엘리먼트.
@@ -87,14 +77,6 @@ export function useTuiEditor({ ref }: Props) {
     const previewEl = ref.current?.getInstance().getEditorElements().mdPreview;
     const convertArr = Array.from(previewEl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
 
-    //먼저 있는놈 돌려요
-
-    // convertArr.forEach((r) => {
-    //   const getCorrectImgPath = imgPath.filter((img) => img.alt === r.alt)[0];
-    //   console.log('하하', getCorrectImgPath, r, imgPath);
-    //   console.log('제발점');
-    //   r.setAttribute('src', String(getCorrectImgPath?.path));
-    // });
     console.dir(previewEl);
     if (imgPathRef.current && imgPathRef.current?.length !== 0) {
       console.log('ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ너임?', imgPathRef);
@@ -110,17 +92,6 @@ export function useTuiEditor({ ref }: Props) {
     onChangeImgDelete();
 
     const resultPrevire = previewEl;
-
-    // const ArrFiter = convertArr.filter((r) => imgPath?.includes({ alt: r.alt }));
-    // ArrFiter.forEach((r) => {
-    //   const getCorrectImgPath = imgPath?.filter((img) => img.alt === r.alt)[0];
-    //   r.setAttribute('src', String(getCorrectImgPath?.path));
-    // });
-
-    // const ArrFiter = convertArr.filter((r) => imgPath?.includes({ alt: r.alt }));
-    // ArrFiter.forEach((r, idx) => {
-    //   previewEl?.querySelectorAll('img')[idx].setAttribute('path', imgPath?.[idx].path as string);
-    // });
 
     setPreviewEl(resultPrevire);
     previweElRef.current = resultPrevire;
@@ -142,9 +113,6 @@ export function useTuiEditor({ ref }: Props) {
       const previewEl = ref.current?.getInstance().getEditorElements().mdPreview;
       const convertArr = Array.from(previewEl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
 
-      //키 입력을 초기화 합니다.(구분용)
-      // currentKey.current = undefined;
-
       if (!imgPathRef.current) {
         const imgSeq = Math.round(Math.random() * 1000000);
         previewEl?.querySelectorAll('img')[0].setAttribute('src', localImageUrl);
@@ -156,6 +124,8 @@ export function useTuiEditor({ ref }: Props) {
         );
         setImgPath([{ seq: imgSeq, path: localImageUrl, alt: imgAltName }]);
         imgPathRef.current = [{ seq: imgSeq, path: localImageUrl, alt: imgAltName }];
+        if (callbackReplaceSrc)
+          callbackReplaceSrc({ localImageUrl, imgAltName, cb }).then((r) => window.alert(r + 'ㅋㅇㄴㄹㄴㅇㅁㄹㅈㄷ'));
         return;
       }
 
@@ -178,13 +148,8 @@ export function useTuiEditor({ ref }: Props) {
             previewEl?.querySelectorAll('img')[idx].setAttribute('src', String(list.path));
           }
         });
-        // imgPath?.forEach((list, idx) => {
-        //   console.log(' 좀zzz');
-        //   if (list.alt === previewEl?.querySelectorAll('img')[idx].alt) {
-        //     previewEl?.querySelectorAll('img')[idx].setAttribute('src', String(list.path));
-        //   }
-        // });
       });
+      if (callbackReplaceSrc) callbackReplaceSrc({ localImageUrl, imgAltName, cb });
 
       setImgPath((prev) => {
         if (!prev) return [{ seq: imgSeq, path: localImageUrl, alt: imgAltName }];
@@ -194,69 +159,22 @@ export function useTuiEditor({ ref }: Props) {
     [imgPath],
   );
 
-  // const handleAddImageBlobHook = async (blob: Blob | File, cb: HookCallback) => {
-  //   const blobFile: any = blob;
-  //   const localImageUrl = URL.createObjectURL(blobFile);
-  //
-  //   const imgSeq = Math.round(Math.random() * 1000000);
-  //   const imgAltName = blobFile.name + imgSeq;
-  //   cb(localImageUrl, imgAltName);
-  //
-  //   const previewEl = ref.current?.getInstance().getEditorElements().mdPreview;
-  //   const convertArr = Array.from(previewEl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
-  //
-  //   // //먼저 있는놈 돌려요
-  //   // const ArrFiter = convertArr.filter((r) => imgPath?.includes({ alt: r.alt }));
-  //   // ArrFiter.forEach((r) => {
-  //   //   const getCorrectImgPath = imgPath?.filter((img) => img.alt === r.alt)[0];
-  //   //   r.setAttribute('src', String(getCorrectImgPath?.path));
-  //   // });
-  //   //
-  //   // //그리고 없는놈 추가
-  //   // const ArrFiterSrcNotfound = convertArr.filter((r) => !imgPath?.includes({ alt: r.alt }));
-  //   // ArrFiterSrcNotfound[0].setAttribute('src', localImageUrl);
-  //
-  //   if (!imgPath) {
-  //     console.log('없다는데', imgPath);
-  //     previewEl?.querySelectorAll('img')[0].setAttribute('src', localImageUrl);
-  //     setImgPath([{ seq: imgSeq, path: localImageUrl, alt: imgAltName }]);
-  //     return;
-  //   }
-  //
-  //   //이놈 있냐?
-  //   console.log('새키야 좀');
-  //   convertArr.forEach((r) => {
-  //     console.log('새키야 좀zz');
-  //     imgPath?.forEach((list, idx) => {
-  //       console.log('새키야 좀zzz');
-  //       if (list.alt === previewEl?.querySelectorAll('img')[idx].alt) {
-  //         previewEl?.querySelectorAll('img')[idx].setAttribute('src', String(list.path));
-  //       }
-  //     });
+  // useEffect(() => {
+  //   ref.current?.getRootElement().addEventListener('keydown', (ev) => {
+  //     // console.log('키키', ev);
+  //     // currentKey.current = ev.key;
   //   });
-  //
-  //   setImgPath((prev) => {
-  //     if (!prev) return [{ seq: imgSeq, path: localImageUrl, alt: imgAltName }];
-  //     return [...prev, { seq: imgSeq, path: localImageUrl, alt: imgAltName }];
-  //   });
-  // };
+  //   return () => {
+  //     ref.current?.getRootElement().removeEventListener('keydown', () => {});
+  //   };
+  // }, [ref.current]);
 
-  useEffect(() => {
-    ref.current?.getRootElement().addEventListener('keydown', (ev) => {
-      // console.log('키키', ev);
-      // currentKey.current = ev.key;
-    });
-    return () => {
-      ref.current?.getRootElement().removeEventListener('keydown', () => {});
-    };
-  }, [ref.current]);
-
-  if (ref.current) {
-    const previewEssl = ref.current?.getInstance().getEditorElements().mdPreview;
-    const convertArr = Array.from(previewEssl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
-    console.log(convertArr, 'zzzz');
-  }
-  console.log(imgPath, '상태왜이럼');
+  // if (ref.current) {
+  //   const previewEssl = ref.current?.getInstance().getEditorElements().mdPreview;
+  //   const convertArr = Array.from(previewEssl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
+  //   console.log(convertArr, 'zzzz');
+  // }
+  // console.log(imgPath, '상태왜이럼');
 
   return [previewEl, handleAddImageBlobHook, onChangeEditorElement];
 }
