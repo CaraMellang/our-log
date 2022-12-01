@@ -27,6 +27,7 @@ export function useTuiEditor({ ref }: Props) {
   const imgPathRef = useRef<ImgPathType[]>();
   const [forceRerender, setForceRerender] = useState(false);
   const previweElRef = useRef<Element | string>();
+  const currentKey = useRef<string>();
 
   //입력하다가 이미지 태그 삭제하면 돌아가는 놈
   const onChangeImgDelete = () => {
@@ -34,16 +35,41 @@ export function useTuiEditor({ ref }: Props) {
     const convertArr = Array.from(previewEl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
 
     const ArrFilter = convertArr.filter((r) => !imgPathRef.current?.includes({ alt: r.alt }));
-    const ArrSrcFilter = convertArr.filter((r) => {
-      if (!r.src) return false;
-      return true;
-    });
+
     console.log('자 내가 지워볼게 ', convertArr, ArrFilter, imgPathRef.current);
-    if (!imgPathRef.current) {
-      imgPathRef.current = [...ArrSrcFilter.map((r) => ({ src: r.src, alt: r.alt }))];
-      return;
+    console.log('currentKey', currentKey.current);
+    //키입력을 사용한경우 리턴 ,키입력이 아닌경우 통과합니다.
+    // if (currentKey.current) return;
+
+    // if (!imgPathRef.current) {
+    //   imgPathRef.current = [...ArrSrcFilter.map((r) => ({ src: r.src, alt: r.alt }))];
+    //   return;
+    // }
+    // imgPathRef.current = [...imgPathRef.current, ...ArrSrcFilter.map((r) => ({ src: r.src, alt: r.alt }))];
+
+    if (imgPathRef.current) {
+      //없어진 img 태그 확인.(Element 리턴)
+      const ArrSrcFilter = convertArr.filter((r) => {
+        let flag = false;
+        imgPathRef.current?.forEach((path) => {
+          if (path.alt === r.alt) flag = true;
+        });
+        return flag;
+      });
+
+      const imgPathRefFilter = imgPathRef.current?.filter((r) => {
+        let flag = false;
+        convertArr.forEach((path) => {
+          if (path.alt === r.alt) flag = true;
+        });
+        return flag;
+      });
+      console.log('ㅋㅋ...', imgPathRefFilter);
+
+      ArrSrcFilter.forEach((r, idx) => r.setAttribute('src', imgPathRefFilter[idx].path as string));
+
+      console.log('ㅎㅇ ㅎㅇ', ArrFilter, ArrSrcFilter, convertArr);
     }
-    imgPathRef.current = [...imgPathRef.current, ...ArrSrcFilter.map((r) => ({ src: r.src, alt: r.alt }))];
 
     // convertArr.forEach((r) => {
     //   console.log('지울건데');
@@ -115,6 +141,9 @@ export function useTuiEditor({ ref }: Props) {
 
       const previewEl = ref.current?.getInstance().getEditorElements().mdPreview;
       const convertArr = Array.from(previewEl?.querySelectorAll('img') as NodeListOf<HTMLImageElement>);
+
+      //키 입력을 초기화 합니다.(구분용)
+      // currentKey.current = undefined;
 
       if (!imgPathRef.current) {
         const imgSeq = Math.round(Math.random() * 1000000);
@@ -211,6 +240,16 @@ export function useTuiEditor({ ref }: Props) {
   //     return [...prev, { seq: imgSeq, path: localImageUrl, alt: imgAltName }];
   //   });
   // };
+
+  useEffect(() => {
+    ref.current?.getRootElement().addEventListener('keydown', (ev) => {
+      // console.log('키키', ev);
+      // currentKey.current = ev.key;
+    });
+    return () => {
+      ref.current?.getRootElement().removeEventListener('keydown', () => {});
+    };
+  }, [ref.current]);
 
   if (ref.current) {
     const previewEssl = ref.current?.getInstance().getEditorElements().mdPreview;
