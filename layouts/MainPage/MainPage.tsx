@@ -1,6 +1,8 @@
 'use client';
 import styled from '@emotion/styled';
 import { PostCard } from '@components/ui/PostCard';
+import { LayoutResponsive } from '@layouts/layout';
+import { HomeTab } from '@components/home';
 
 const dummydata = [
   { seq: 1, title: '타asdasd', shortContent: 'asd코', author: '오', date: '2일전', commentCount: 32, likeCount: 431 },
@@ -27,14 +29,14 @@ const dummydata = [
 
 export function MainPage() {
   return (
-    <MainPageWrap>
-      <div>메인페이지 입니다.</div>
+    <LayoutResponsive>
+      <HomeTab />
       <PostsWrap>
         {dummydata.map((item) => (
           <PostCard {...item} />
         ))}
       </PostsWrap>
-    </MainPageWrap>
+    </LayoutResponsive>
   );
 }
 
@@ -43,6 +45,4 @@ const PostsWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  max-width: 1320px;
-  margin: auto;
 `;

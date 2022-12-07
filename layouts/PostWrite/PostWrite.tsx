@@ -16,9 +16,7 @@ export default function PostWrite() {
 
   const callbackReplaceSrc = async ({ localImageUrl, imgAltName, cb }: PromiseCbProps) => {
     try {
-      setTimeout(() => {
-        cb('localImageUrl', '헐 ㅋㅋㅋ');
-      }, 5555);
+      console.log('콜백실행');
     } catch (e: any) {}
   };
 

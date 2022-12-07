@@ -23,7 +23,9 @@ export function PostCard({
 }: Props) {
   return (
     <PostCardWrap href={'/post/@132123'}>
-      <Image src={'https://picsum.photos/236'} width={320} height={160} alt={'LGTM'} />
+      <PostImageWrap>
+        <Image src={'https://picsum.photos/236'} layout={'fill'} alt={'LGTM'} />
+      </PostImageWrap>
       <PostMainWrap>
         <PostMainWrapTop>
           <PostTitle>{title}</PostTitle>
@@ -45,7 +47,7 @@ export function PostCard({
 const PostCardWrap = styled(Link)`
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: 20rem;
   background-color: white;
   margin: 8px 0;
   border-radius: 8px;
@@ -57,6 +59,20 @@ const PostCardWrap = styled(Link)`
     transition: all 0.2s ease-in-out;
     transform: scale(1.02, 1.02);
   }
+
+  @media (max-width: 1056px) {
+    width: calc(50% - 2rem);
+  }
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+`;
+
+const PostImageWrap = styled.div`
+  position: relative;
+  width: 100%;
+  //height: 160px;
+  aspect-ratio: 16/9;
 `;
 const PostMainWrap = styled.div`
   padding: 12px 4px;
@@ -82,7 +98,9 @@ const PostTitle = styled.div`
 const PostAuthor = styled.div`
   font-weight: bold;
 `;
-const PostShortContent = styled.div``;
+const PostShortContent = styled.div`
+  height: 4rem;
+`;
 const PostDate = styled.div``;
 const PostCommentCount = styled.div``;
 const PostLikeCount = styled.div``;

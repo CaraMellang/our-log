@@ -2,6 +2,7 @@ import create, { SetState, StoreApi } from 'zustand';
 import { devtools } from 'zustand/middleware';
 interface User {
   username: string;
+  s3Files?: [{ fileName: string; path: string }];
 }
 
 export interface UserState {
@@ -33,9 +34,8 @@ export const initialUserState: User = {
 
 export const createUserSlice = (
   set: StoreApi<UserState>['setState'],
-  get: StoreApi<UserState>['getState']
+  get: StoreApi<UserState>['getState'],
 ): UserState => ({
   user: initialUserState,
-  updateUser: username =>
-    set(state => ({ user: { ...state.user, username: 'ㅋㅋ' + username } })),
+  updateUser: (username) => set((state) => ({ user: { ...state.user, username: 'ㅋㅋ' + username } })),
 });

@@ -1,0 +1,1 @@
+export { LayoutResponsive } from './LayoutResponsive';
