@@ -17,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
       </head>
       <body>
         <GlobalHeader />
+        <div style={{ height: '64px' }} />
         <ManageUI>{children}</ManageUI>
         <InitialClientComponent />
       </body>

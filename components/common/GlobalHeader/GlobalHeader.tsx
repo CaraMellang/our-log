@@ -1,7 +1,7 @@
 'use client';
 import styled from '@emotion/styled';
 import { LayoutResponsive } from '@layouts/layout';
-import { BsFillTriangleFill, FaSearch } from 'react-icons/all';
+import { FaSearch } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AccountMenu } from '@components/common/AccountMenu';
@@ -29,18 +29,18 @@ export function GlobalHeader({ isFixed = true }: { isFixed?: boolean }) {
 }
 
 const GlobalHeaderBlock = styled.header<{ isTrigger: boolean; detectScrollDirection: 1 | -1; isFixed: boolean }>`
-  // position: ${({ isTrigger, isFixed }) => (isFixed ? 'fixed' : 'static')};
+  position: ${({ isTrigger, isFixed }) => (isFixed ? 'fixed' : 'static')};
   // opacity: ${({ isTrigger, isFixed }) => (isTrigger && !isFixed ? 0 : 1)};
 
-  position: sticky;
-  top: 0;
+  //position: sticky;
+  //top: 0;
 
   background-color: #333333;
   color: white;
   height: 64px;
   width: 100%;
   z-index: 2;
-  // margin-top: ${({ detectScrollDirection }) => (detectScrollDirection === 1 ? '-80px' : '0')};
+  margin-top: ${({ detectScrollDirection }) => (detectScrollDirection === 1 ? '-80px' : '0')};
   transition: margin-top 0.2s ease-in-out;
 `;
 

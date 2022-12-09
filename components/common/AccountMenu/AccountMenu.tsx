@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { useStore } from '@/store';
 import Image from 'next/image';
-import { BsFillTriangleFill } from 'react-icons/all';
+import { BsFillTriangleFill } from 'react-icons/bs';
 import { Menu } from '@components/ui/Menu';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 const menuItems = [
@@ -29,6 +29,12 @@ export function AccountMenu() {
   const user = useStore((state) => state.user);
   const [open, setOpen] = useState(false);
 
+  const handleOpen = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setOpen((prev) => !prev);
+    console.log('ㅎㅇ');
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -45,13 +51,7 @@ export function AccountMenu() {
   }, []);
 
   return (
-    <AccountMenuWrap
-      onClick={(e) => {
-        e.stopPropagation();
-        setOpen((prev) => !prev);
-        console.log('ㅎㅇ');
-      }}
-    >
+    <AccountMenuWrap onClick={handleOpen}>
       <UserAvatar>
         <Image src={'https://picsum.photos/236'} layout={'fill'} alt={'안뇽'} />
       </UserAvatar>

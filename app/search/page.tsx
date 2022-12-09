@@ -1,3 +1,9 @@
+import { Search } from '@layouts/Search';
+
 export default function Page() {
-  return <div>써치</div>;
+  return (
+    <div>
+      <Search />
+    </div>
+  );
 }

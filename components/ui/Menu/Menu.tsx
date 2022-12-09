@@ -10,10 +10,13 @@ type Props = {
 export function Menu({ open, menuItems }: Props) {
   const [isDisplay, setIsDisplay] = useState(false);
   useEffect(() => {
+    // const getBodyEl = document.querySelector('body') as HTMLBodyElement;
     if (open) {
       setIsDisplay(true);
+      // getBodyEl.style.overflow = 'hidden';
     }
     if (!open) {
+      // getBodyEl.style.overflow = 'auto';
       setTimeout(() => {
         setIsDisplay(false);
       }, 1000);

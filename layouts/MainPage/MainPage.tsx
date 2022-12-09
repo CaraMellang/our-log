@@ -1,8 +1,10 @@
 'use client';
 import styled from '@emotion/styled';
-import { PostCard } from '@components/ui/PostCard';
+import { Card } from '@components/ui/Card';
 import { LayoutResponsive } from '@layouts/layout';
 import { HomeTab } from '@components/home';
+import { CardSkeleton } from '@components/Skeleton';
+import { useEffect, useState } from 'react';
 
 const dummydata = [
   { seq: 1, title: '타asdasd', shortContent: 'asd코', author: '오', date: '2일전', commentCount: 32, likeCount: 431 },
@@ -28,13 +30,21 @@ const dummydata = [
 ];
 
 export function MainPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <LayoutResponsive>
       <HomeTab />
       <PostsWrap>
-        {dummydata.map((item) => (
-          <PostCard {...item} />
-        ))}
+        {loading
+          ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((item) => <CardSkeleton />)
+          : dummydata.map((item) => <Card {...item} />)}
       </PostsWrap>
     </LayoutResponsive>
   );
