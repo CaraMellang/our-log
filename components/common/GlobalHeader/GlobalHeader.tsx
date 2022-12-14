@@ -6,10 +6,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { AccountMenu } from '@components/common/AccountMenu';
 import { useScroll } from '@hooks/useScroll';
+import { useStore } from '@/store';
+import { useRouter } from 'next/navigation';
 
 export function GlobalHeader({ isFixed = true }: { isFixed?: boolean }) {
+  const router = useRouter();
   const [scrollY, isTrigger, detectScrollDirection] = useScroll(64);
+  const user = useStore((state) => state.user);
   console.log(scrollY, isTrigger, detectScrollDirection);
+  console.log(user, Object.keys(user));
 
   return (
     <GlobalHeaderBlock isTrigger={isTrigger} detectScrollDirection={detectScrollDirection} isFixed={isFixed}>
@@ -21,7 +26,11 @@ export function GlobalHeader({ isFixed = true }: { isFixed?: boolean }) {
           <IconSearchWrap href={'/search'}>
             <FaSearch />
           </IconSearchWrap>
-          <AccountMenu />
+          {user && Object.keys(user).length !== 0 ? (
+            <AccountMenu />
+          ) : (
+            <div onClick={() => router.push(`/signin`)}>로그인이 필요합니다.</div>
+          )}
         </RightWrap>
       </GlobalHeaderWrap>
     </GlobalHeaderBlock>

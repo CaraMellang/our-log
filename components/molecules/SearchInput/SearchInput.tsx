@@ -1,8 +1,8 @@
 'use client';
 
 import styled from '@emotion/styled';
-import { IconButton } from '@components/ui/Buttons';
-import { InputBase } from '@components/ui/Inputs';
+import { IconButton } from '@components/atom/Buttons';
+import { InputBase } from '@components/atom/Inputs';
 import React, { useRef, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 

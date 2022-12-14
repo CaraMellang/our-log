@@ -31,19 +31,38 @@ const TuiPreviewer = ({ el }: CustomTuiViewerProps) => {
 
 const CustomTuiViewerWrap = styled.div`
   font-weight: bold;
+  //.toastui-editor-contents .toastui-editor-md-preview-highlight::after {
+  //  background-color: unset;
+  //}
+  //
+  //.toastui-editor-contents table {
+  //  margin: 14px auto;
+  //}
+  //.toastui-editor-contents img {
+  //  display: block;
+  //  margin: 12px auto;
+  //}
+  ////인용문
+  //.toastui-editor-contents blockquote {
+  //  background-color: #f8f9fa;
+  //  border-left: 4px solid #20c997;
+  //  p {
+  //    color: black;
+  //  }
+  //}
   .toastui-editor-contents .toastui-editor-md-preview-highlight::after {
     background-color: unset;
   }
-
-  .toastui-editor-contents table {
+  table {
     margin: 14px auto;
   }
-  .toastui-editor-contents img {
+  img {
     display: block;
+    max-width: 100%;
     margin: 12px auto;
   }
   //인용문
-  .toastui-editor-contents blockquote {
+  blockquote {
     background-color: #f8f9fa;
     border-left: 4px solid #20c997;
     p {

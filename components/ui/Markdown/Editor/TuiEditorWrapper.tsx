@@ -2,6 +2,7 @@ import { Editor, EditorProps } from '@toast-ui/react-editor';
 import React from 'react';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
+import * as DOMPurify from 'dompurify';
 //컬러플러그인
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
@@ -26,6 +27,9 @@ const EditorWrapper = (props: TuiEditorWithForwardedProps) => (
   <Editor
     {...props}
     ref={props.forwardedRef}
+    customHTMLSanitizer={(html) => {
+      return DOMPurify.sanitize(html, { ALLOW_UNKNOWN_PROTOCOLS: true });
+    }}
     plugins={[colorSyntax, codeSyntaxHighlightAll]}
     // plugins={[colorSyntax, [codeSyntaxHighlightAll, { highlighter: Prism }]]}
   />

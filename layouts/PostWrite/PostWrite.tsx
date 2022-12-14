@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { TuiPreviewer, TuiEditor } from '@components/ui/Markdown';
 import { HookCallback } from '@toast-ui/editor/types/editor';
 import { PromiseCbProps, useTuiEditor } from '@hooks/useTuiEditor';
+import { v4 as uuid } from 'uuid';
 
 export default function PostWrite() {
   const [theme, setTheme] = useState('light');
@@ -20,51 +21,16 @@ export default function PostWrite() {
     } catch (e: any) {}
   };
 
-  const [previewEl, handleAddImageBlobHook, onChangeEditorElement] = useTuiEditor({
-    ref: editorRef,
-    callbackReplaceSrc,
-  });
+  // const [previewEl, handleAddImageBlobHook, onChangeEditorElement] = useTuiEditor({
+  //   ref: editorRef,
+  //   callbackReplaceSrc,
+  // });
 
-  // const handleChange = (e: 'markdown' | 'wysiwyg') => {
-  //   // const previewEl = editorRef.current?.getRootElement()?.querySelector('.toastui-editor-contents')?.outerHTML;
-  //   // const previewEl = editorRef.current?.getInstance().getHTML() as string;
-  //   const previewEl = editorRef.current?.getInstance().getEditorElements().mdPreview.outerHTML;
-  //   setEl(previewEl);
-  // };
-  //
-  // const HandleAddImageBlobHook = async (blob: Blob | File, cb: HookCallback) => {
-  //   const blobFile: any = blob;
-  //   const localImageUrl = URL.createObjectURL(blobFile);
-  //
-  //   const imgSeq = Math.round(Math.random() * 100000);
-  //   cb(localImageUrl, blobFile.name + imgSeq);
-  //   const imgArr = editorRef.current?.getRootElement().querySelectorAll('img') as NodeListOf<HTMLImageElement>;
-  //   console.log('이미지들', imgArr, localImageUrl);
-  //   const imgArrLength = imgArr.length;
-  //   console.log(imgArrLength);
-  //
-  //   imgArr[imgArrLength - 1].setAttribute('src', localImageUrl);
-  //   imgArr[imgArrLength - 1].setAttribute('id', String(imgSeq));
-  //
-  //   // if (!imgPaths) return setImgPaths([{ seq: imgSeq, path: localImageUrl }]);
-  //   // //typescript 이것도 못거르누
-  //   // setImgPaths((prev) => {
-  //   //   if (!prev) return [{ seq: imgSeq, path: localImageUrl }];
-  //   //   return [...prev, { seq: imgSeq, path: localImageUrl }];
-  //   // });
-  //   //목표 - 사진을 올리면 viewer이미지태그를 직접 조작해서 넣어줄거임. 동시에 얘는 멍청해서 바뀌면 src 어트리뷰트가 증발하니까 이곳에서 상태로 관리해서 하나하나 검증해서 넣어줄 것.
-  //   // TUI 제발 일해라.
-  //
-  //   // (editorRef.current?.getRootElement().querySelectorAll('img') as NodeListOf<HTMLImageElement>)[
-  //   //   imgArrLength - 1
-  //   // ].setAttribute('src', localImageUrl);
-  //
-  //   const convertArr = Array.from(
-  //     editorRef.current?.getRootElement().querySelectorAll('img') as NodeListOf<HTMLImageElement>,
-  //   );
-  //   convertArr.map((r) => console.dir(r.alt));
-  //   setEl(editorRef.current?.getInstance().getEditorElements().mdPreview);
-  // };
+  const onChangeTest = () => {
+    console.log(editorRef.current?.getInstance());
+    const getHTML = editorRef.current?.getInstance().getHTML();
+    setEl(getHTML);
+  };
 
   useLayoutEffect(() => {
     const htmlTag = document.querySelector('html') as HTMLHtmlElement;
@@ -82,21 +48,62 @@ export default function PostWrite() {
         {typeof window !== 'undefined' ? (
           <TuiEditor
             ref={editorRef}
-            onChange={onChangeEditorElement}
+            // onChange={onChangeEditorElement}
+            onChange={onChangeTest}
             initialValue=" "
             previewStyle={'vertical'}
             theme={theme}
             height="100%"
             hideModeSwitch={true}
+            // hooks={{
+            //   addImageBlobHook: handleAddImageBlobHook,
+            // }}
             hooks={{
-              addImageBlobHook: handleAddImageBlobHook,
+              addImageBlobHook: async (blob, cb) => {
+                const blobFile = blob as { name: string } & (Blob | File);
+                const url = URL.createObjectURL(blobFile);
+                const randomSeq = Math.round(Math.random() * 100000);
+                const first = blobFile.name.split('.')[0] + randomSeq;
+                const second = blobFile.name.split('.')[1];
+                // const fileName = first + '.' + second;
+                const fileName = uuid() + '.' + second;
+                cb(url, fileName);
+
+                setTimeout(() => {
+                  const getImage = editorRef.current?.getRootElement().querySelector(`img[alt="${fileName}"]`);
+                  const getImageAltName = editorRef.current
+                    ?.getRootElement()
+                    .querySelectorAll(
+                      `.toastui-editor-md-link.toastui-editor-md-link-desc.toastui-editor-md-marked-text`,
+                    );
+                  const getImageUrl = editorRef.current
+                    ?.getRootElement()
+                    .querySelectorAll(
+                      `.toastui-editor-md-link.toastui-editor-md-link-url.toastui-editor-md-marked-text`,
+                    );
+                  console.log('ㅎㅇㅎㅇ 이거 찾았음?', getImage, getImageAltName);
+                  setTimeout(() => {
+                    if (getImage && getImageAltName) {
+                      console.log('되긴하냐', getImage, getImageAltName);
+                      getImage.setAttribute('src', 'https://picsum.photos/236');
+                      Array.from(getImageAltName).filter((r, idx) => {
+                        console.log('몇번째 인덱스?', idx);
+                        if (r.innerHTML !== fileName) return false;
+                        if (getImageUrl) getImageUrl[idx].innerHTML = 'https://picsum.photos/236';
+                        return true;
+                      });
+                    }
+                  }, 500);
+                }, 1000);
+              },
             }}
           />
         ) : (
           ''
         )}
       </EditorWrap>
-      <ViewerWrap>{<TuiPreviewer el={previewEl} />}</ViewerWrap>
+      {/*<ViewerWrap>{<TuiPreviewer el={previewEl} />}</ViewerWrap>*/}
+      <ViewerWrap>{<TuiPreviewer el={el} />}</ViewerWrap>
     </PostWriteWrap>
   );
 }

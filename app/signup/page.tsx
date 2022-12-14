@@ -1,3 +1,5 @@
+import { SignUp } from '@layouts/SignUp';
+
 export default function SignUpPage() {
-  return <div>사인업</div>;
+  return <SignUp />;
 }
