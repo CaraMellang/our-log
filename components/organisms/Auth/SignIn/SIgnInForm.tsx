@@ -7,6 +7,7 @@ import { useStore } from '@/store';
 import { useRouter } from 'next/navigation';
 import { regexEmail } from '@/utils/regex';
 import Link from 'next/link';
+import { SignIn } from '@common/api/auth';
 
 export function SIgnInForm() {
   const router = useRouter();
@@ -25,6 +26,20 @@ export function SIgnInForm() {
     console.log(email, password);
     if (!regexEmail.test(email)) {
       setError(true);
+      return;
+    }
+
+    const info = {
+      email,
+      password,
+    };
+
+    try {
+      const data = await SignIn(info);
+      console.log(data);
+      return;
+    } catch (e) {
+      console.log(e);
       return;
     }
 

@@ -16,7 +16,7 @@ export function SignInSocialButtonGroup() {
   return (
     <SignInSocialButtonGroupWrap>
       {providerList.map((r) => (
-        <SocialButton provider={r.type} />
+        <SocialButton key={r.type} provider={r.type} />
       ))}
     </SignInSocialButtonGroupWrap>
   );
