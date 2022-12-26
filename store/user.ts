@@ -6,7 +6,8 @@ interface User {
 }
 
 export interface UserState {
-  user: User;
+  user?: User;
+  accessToken?: string;
   updateUser: (username: string) => void;
 }
 

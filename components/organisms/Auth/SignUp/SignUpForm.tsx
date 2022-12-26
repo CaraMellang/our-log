@@ -39,10 +39,8 @@ export function SignUpForm() {
     try {
       const { data } = await SignUp(info);
       console.log(data);
-      return;
     } catch (e) {
       console.dir(e);
-      return;
     }
 
     await router.push('/');

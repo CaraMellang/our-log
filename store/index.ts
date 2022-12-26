@@ -18,6 +18,7 @@ export const useStore = create(
   devtools(
     combine(initialState, (set) => ({
       update: (gg: string) => set((state) => ({ user: { ...state.user, name: '아 ㅋㅋ' + gg } })),
+      updateUserAccessToken: (AT: string) => set((state) => ({ user: { accessToken: AT } })),
       hi: { name: '이집은 state에 액션을 넣나봐요?' },
       reset: () => set(initialState),
     })),

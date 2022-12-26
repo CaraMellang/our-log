@@ -23,7 +23,7 @@ export function InputBase({ initialValue, onChange, ...rest }: Props) {
 const InputWrap = styled.div`
   //background-color: white;
   width: 100%;
-  padding: 8px;
+  margin: 12px 0;
 `;
 
 const Input = styled.input`

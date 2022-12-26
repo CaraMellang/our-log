@@ -1,9 +1,31 @@
 import styled from '@emotion/styled';
-import { InputBase } from '@components/atom/Inputs';
+import { InputBase, ValidateInput } from '@components/atom/Inputs';
 import { TextButton } from '@components/atom/Buttons';
 import React from 'react';
 
+const testObj = [
+  {
+    validation: /[0-9]/,
+    defaultMessage: '숫자 입력해주세요.',
+    errorMessage: '에러',
+    successMessage: '성공띠',
+  },
+  {
+    validation: /[a-z]/,
+    defaultMessage: 'a-z 문자 입력해주세요.1',
+    errorMessage: '에러1',
+    successMessage: '성공띠1',
+  },
+  {
+    validation: (value: string) => value.length > 8,
+    defaultMessage: '8자리',
+    errorMessage: '8자리 이상 입력해주세요',
+    successMessage: '8자리에요!',
+  },
+];
+
 interface Props extends React.HTMLAttributes<HTMLFormElement> {}
+
 export function SignUpFormInputs({ onSubmit, onChange }: Props) {
   return (
     <SignUpFormInputsWrap onSubmit={onSubmit} onChange={onChange}>
@@ -11,6 +33,11 @@ export function SignUpFormInputs({ onSubmit, onChange }: Props) {
       <InputBase id="email" placeholder="이메일을 입력해주세요." />
       <InputBase id="password" type="password" placeholder="패스워드를 입력해주세요." />
       <InputBase id="passwordConfirm" type="password" placeholder="패스워드확인을 입력해주세요." />
+      <ValidateInput
+        validate={testObj}
+        onValidate={(isValidate) => console.log('최종', isValidate)}
+        placeholder={'테스트용입니다.'}
+      />
       <InputBase id="username" placeholder="닉네임을 입력해주세요." />
       <TextButton type="submit">회원가입</TextButton>
     </SignUpFormInputsWrap>

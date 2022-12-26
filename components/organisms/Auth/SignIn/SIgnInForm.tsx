@@ -11,7 +11,7 @@ import { SignIn } from '@common/api/auth';
 
 export function SIgnInForm() {
   const router = useRouter();
-  const update = useStore((state) => state.update);
+  const { updateUserAccessToken, user } = useStore((state) => state);
   const [error, setError] = React.useState(false);
 
   const handleChange = () => {
@@ -37,14 +37,13 @@ export function SIgnInForm() {
     try {
       const data = await SignIn(info);
       console.log(data);
-      return;
+      updateUserAccessToken(data.access_token);
+      console.log(user, data);
     } catch (e) {
       console.log(e);
-      return;
     }
 
     await router.push('/');
-    update(email);
   };
 
   return (

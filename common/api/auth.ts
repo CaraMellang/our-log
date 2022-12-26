@@ -22,5 +22,5 @@ export interface SignInRequestDto {
 }
 
 export function SignIn(dto: SignInRequestDto) {
-  return POST<{ data: { access_token: string } }>(`/auth/signin`, dto);
+  return POST<{ access_token: string }>(`/auth/signin`, dto);
 }
