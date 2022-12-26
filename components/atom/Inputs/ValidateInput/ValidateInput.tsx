@@ -75,14 +75,14 @@ export function ValidateInput({ validate, onValidate, ...rest }: Props) {
     }
   };
 
-  useEffect(() => {}, [isCheckValidation]);
+  useEffect(() => {
+    if (onValidate) onValidate(isCheckValidation);
+  }, [isCheckValidation]);
 
   return (
     <ValidateInputWrap>
       <InputBase {...rest} onChange={handleChange} />
       {validateMessage.map((r) => MessageRenderer(r.type, r.message))}
-      <div>안녕</div>
-      <div>{String(isCheckValidation)}</div>
     </ValidateInputWrap>
   );
 }

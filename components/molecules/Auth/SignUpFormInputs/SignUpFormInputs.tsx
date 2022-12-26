@@ -24,20 +24,18 @@ const testObj = [
   },
 ];
 
-interface Props extends React.HTMLAttributes<HTMLFormElement> {}
+interface Props extends React.HTMLAttributes<HTMLFormElement> {
+  onValidate?: (isValidate: boolean) => void;
+}
 
-export function SignUpFormInputs({ onSubmit, onChange }: Props) {
+export function SignUpFormInputs({ onValidate, onSubmit, onChange }: Props) {
   return (
     <SignUpFormInputsWrap onSubmit={onSubmit} onChange={onChange}>
       <SignUpFormTitle>오예</SignUpFormTitle>
       <InputBase id="email" placeholder="이메일을 입력해주세요." />
       <InputBase id="password" type="password" placeholder="패스워드를 입력해주세요." />
       <InputBase id="passwordConfirm" type="password" placeholder="패스워드확인을 입력해주세요." />
-      <ValidateInput
-        validate={testObj}
-        onValidate={(isValidate) => console.log('최종', isValidate)}
-        placeholder={'테스트용입니다.'}
-      />
+      <ValidateInput validate={testObj} onValidate={onValidate} placeholder={'테스트용입니다.'} />
       <InputBase id="username" placeholder="닉네임을 입력해주세요." />
       <TextButton type="submit">회원가입</TextButton>
     </SignUpFormInputsWrap>

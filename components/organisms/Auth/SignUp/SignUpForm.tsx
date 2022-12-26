@@ -48,7 +48,11 @@ export function SignUpForm() {
   };
   return (
     <SignUpFormWrap>
-      <SignUpFormInputs onSubmit={handleSubmit} onChange={handleChange} />
+      <SignUpFormInputs
+        onValidate={(isValidate) => console.log('아아 드디어ㅣ..', isValidate)}
+        onSubmit={handleSubmit}
+        onChange={handleChange}
+      />
       <div style={{ padding: '8px', color: 'gray' }}>
         {error && <span style={{ color: 'red' }}>이메일 또는 비밀번호가 잘못되었습니다.</span>}
       </div>
