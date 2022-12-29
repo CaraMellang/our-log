@@ -6,21 +6,21 @@ import React from 'react';
 const testObj = [
   {
     validation: /[0-9]/,
-    defaultMessage: '숫자 입력해주세요.',
-    errorMessage: '에러',
-    successMessage: '성공띠',
+    defaultMessage: '최소 한글자 이상의 숫자가 필요합니다.',
+    errorMessage: '최소 한글자 이상의 숫자가 필요합니다.',
+    successMessage: '최소 한글자 이상의 숫자가 필요합니다.',
   },
   {
     validation: /[a-z]/,
-    defaultMessage: 'a-z 문자 입력해주세요.1',
-    errorMessage: '에러1',
-    successMessage: '성공띠1',
+    defaultMessage: 'a-z 문자 입력해주세요.',
+    errorMessage: 'a-z 문자 입력해주세요.',
+    successMessage: 'a-z 문자 입력해주세요.',
   },
   {
     validation: (value: string) => value.length > 8,
-    defaultMessage: '8자리',
+    defaultMessage: '8자리 이상 입력해주세요',
     errorMessage: '8자리 이상 입력해주세요',
-    successMessage: '8자리에요!',
+    successMessage: '8자리 이상 입력해주세요',
   },
 ];
 

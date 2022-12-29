@@ -23,14 +23,19 @@ export function ValidateInput({ validate, onValidate, ...rest }: Props) {
   const [validateMessage, setValidateMessage] = React.useState<{ type: MessageType; message: string }[]>(
     validate.map((r) => ({ type: 'default', message: r.defaultMessage })),
   );
-  const [isCheckValidation, setIsCheckValidation] = React.useState(false); //조건문이 모두 맞으면 true
+  const [isCheckValidationArr, setIsCheckValidationArr] = React.useState<boolean[]>(
+    new Array(validate.length).fill(false),
+  ); //조건문이 모두 맞으면 true
+  const [isCheckValidation, setIsCheckValidation] = React.useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     const inputValidated: { type: MessageType; message: string }[] = validate.map((r, idx) => {
+      const prevIsCheckValidation = isCheckValidationArr || [];
       if (value === '') {
-        setIsCheckValidation(false);
+        prevIsCheckValidation[idx] = false;
+        setIsCheckValidationArr(prevIsCheckValidation);
         return {
           type: 'default',
           message: r.defaultMessage,
@@ -42,20 +47,23 @@ export function ValidateInput({ validate, onValidate, ...rest }: Props) {
       else if (typeof r.validation === 'function') validation = r.validation(value);
 
       if (!validation) {
-        setIsCheckValidation(false);
+        prevIsCheckValidation[idx] = false;
+        setIsCheckValidationArr(prevIsCheckValidation);
         return {
           type: 'error',
           message: r.errorMessage,
         };
       }
       if (validation) {
-        setIsCheckValidation(true);
+        prevIsCheckValidation[idx] = true;
+        setIsCheckValidationArr(prevIsCheckValidation);
         return {
           type: 'success',
           message: r.successMessage,
         };
       }
-      setIsCheckValidation(false);
+      prevIsCheckValidation[idx] = false;
+      setIsCheckValidationArr(prevIsCheckValidation);
       return {
         type: 'default',
         message: r.defaultMessage,
@@ -75,6 +83,16 @@ export function ValidateInput({ validate, onValidate, ...rest }: Props) {
     }
   };
 
+  useEffect(() => {
+    const trueValidationArrLength = isCheckValidationArr.filter((f) => f).length;
+
+    setIsCheckValidation(trueValidationArrLength === validate.length);
+  }, [JSON.stringify(isCheckValidationArr)]);
+
+  // useEffect(() => {
+  //   if (onValidate)
+  //     onValidate(isCheckValidationArr.filter((f) => (f.isCheck === true ? true : false)).length === validate.length);
+  // }, [isCheckValidationArr]);
   useEffect(() => {
     if (onValidate) onValidate(isCheckValidation);
   }, [isCheckValidation]);

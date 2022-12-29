@@ -12,6 +12,7 @@ export function SignUpForm() {
   const router = useRouter();
   const update = useStore((state) => state.update);
   const [error, setError] = React.useState(false);
+  const [isValidate, setIsValidate] = React.useState(false);
 
   const handleChange = () => {
     setError(false);
@@ -25,6 +26,9 @@ export function SignUpForm() {
     const passwordConfirm = (formTarget.elements.namedItem('passwordConfirm') as HTMLFormElement).value;
     const username = (formTarget.elements.namedItem('username') as HTMLFormElement).value;
 
+    console.log(isValidate);
+
+    if (!isValidate) return window.alert('아니 말이되는소리를해');
     console.log(email, password, passwordConfirm);
     if (password !== passwordConfirm) return setError(true);
     if (!regexEmail.test(email)) return setError(true);
@@ -46,13 +50,10 @@ export function SignUpForm() {
     await router.push('/');
     update(email);
   };
+
   return (
     <SignUpFormWrap>
-      <SignUpFormInputs
-        onValidate={(isValidate) => console.log('아아 드디어ㅣ..', isValidate)}
-        onSubmit={handleSubmit}
-        onChange={handleChange}
-      />
+      <SignUpFormInputs onValidate={setIsValidate} onSubmit={handleSubmit} onChange={handleChange} />
       <div style={{ padding: '8px', color: 'gray' }}>
         {error && <span style={{ color: 'red' }}>이메일 또는 비밀번호가 잘못되었습니다.</span>}
       </div>
