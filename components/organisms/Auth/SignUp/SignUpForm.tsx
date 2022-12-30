@@ -7,6 +7,7 @@ import { useStore } from '@/store';
 import { regexEmail } from '@/utils/regex';
 import { SignUp } from '@common/api/auth';
 import { YN } from '@common/constant';
+import { toast } from 'react-toastify';
 
 export function SignUpForm() {
   const router = useRouter();
@@ -26,9 +27,7 @@ export function SignUpForm() {
     const passwordConfirm = (formTarget.elements.namedItem('passwordConfirm') as HTMLFormElement).value;
     const username = (formTarget.elements.namedItem('username') as HTMLFormElement).value;
 
-    console.log(isValidate);
-
-    if (!isValidate) return window.alert('아니 말이되는소리를해');
+    if (!isValidate) return toast.error('패스워드 조건이 일치하지 않습니다.');
     console.log(email, password, passwordConfirm);
     if (password !== passwordConfirm) return setError(true);
     if (!regexEmail.test(email)) return setError(true);

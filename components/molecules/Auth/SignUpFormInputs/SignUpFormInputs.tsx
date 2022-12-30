@@ -3,7 +3,7 @@ import { InputBase, ValidateInput } from '@components/atom/Inputs';
 import { TextButton } from '@components/atom/Buttons';
 import React from 'react';
 
-const testObj = [
+const validateObj = [
   {
     validation: /[0-9]/,
     defaultMessage: '최소 한글자 이상의 숫자가 필요합니다.',
@@ -12,9 +12,9 @@ const testObj = [
   },
   {
     validation: /[a-z]/,
-    defaultMessage: 'a-z 문자 입력해주세요.',
-    errorMessage: 'a-z 문자 입력해주세요.',
-    successMessage: 'a-z 문자 입력해주세요.',
+    defaultMessage: '최소 한글자 영어 소문자 입력해주세요.',
+    errorMessage: '최소 한글자 영어 소문자 입력해주세요.',
+    successMessage: '최소 한글자 영어 소문자 입력해주세요.',
   },
   {
     validation: (value: string) => value.length > 8,
@@ -33,9 +33,13 @@ export function SignUpFormInputs({ onValidate, onSubmit, onChange }: Props) {
     <SignUpFormInputsWrap onSubmit={onSubmit} onChange={onChange}>
       <SignUpFormTitle>오예</SignUpFormTitle>
       <InputBase id="email" placeholder="이메일을 입력해주세요." />
-      <InputBase id="password" type="password" placeholder="패스워드를 입력해주세요." />
+      <ValidateInput
+        id="password"
+        validate={validateObj}
+        onValidate={onValidate}
+        placeholder={'패스워드를 입력해주세요.'}
+      />
       <InputBase id="passwordConfirm" type="password" placeholder="패스워드확인을 입력해주세요." />
-      <ValidateInput validate={testObj} onValidate={onValidate} placeholder={'테스트용입니다.'} />
       <InputBase id="username" placeholder="닉네임을 입력해주세요." />
       <TextButton type="submit">회원가입</TextButton>
     </SignUpFormInputsWrap>
