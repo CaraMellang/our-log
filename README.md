@@ -37,3 +37,4 @@ nestjs
 - emotion styled 네이밍할 때 wrap이 중첩될경우  첫번째는 wrap  , 두번째는 block 으로 네이밍합니다.
 - molescule에서도 비즈니스 로직적용 가능하다 하지만 지양하는 방식으로 한다.
 - 외부 라이브러리 컴포넌트는 따로 components의 common에서 필요시 atom에 , 평상시는 molecules에 적용합니다(Ex) tuiEditor , react-markdown , codeMirror => 코드미러는 molecules에 적용예정 )
+- 단순한 계산로직 , 렌더링은 렌더러컴포넌트에 인가해 계산하여 반영해 성능을 최적화합니다.
