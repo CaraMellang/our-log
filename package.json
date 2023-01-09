@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build-api-spec": "swagger-typescript-api --path http://localhost:5000/api/v1/swagger/api-docs --output ./common/api --axios --templates .swagger-typescript-api-template"
   },
   "dependencies": {
     "@codemirror/highlight": "^0.19.8",
@@ -44,6 +45,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
-    "sass": "^1.56.0"
+    "sass": "^1.56.0",
+    "swagger-typescript-api": "^12.0.2"
   }
 }
