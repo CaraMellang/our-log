@@ -53,7 +53,7 @@ export default function PostWrite() {
             initialValue=" "
             previewStyle={'vertical'}
             theme={theme}
-            height="100%"
+            height="500px"
             hideModeSwitch={true}
             // hooks={{
             //   addImageBlobHook: handleAddImageBlobHook,
@@ -120,4 +120,5 @@ const ViewerWrap = styled.div`
   width: 50%;
   padding: 3rem;
   overflow: scroll;
+  height: 500px;
 `;
