@@ -52,7 +52,18 @@ export interface SignUpRequestDto {
   individualHref: string;
 }
 
-export type SignInRequestDto = object;
+export interface SignInRequestDto {
+  /**
+   * 이메일
+   * @example "exsample@ex.com"
+   */
+  email: string;
+  /**
+   * 패스워드
+   * @example "1234Asdf!@#$"
+   */
+  password: string;
+}
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from 'axios';
 
